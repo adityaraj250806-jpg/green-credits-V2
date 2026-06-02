@@ -1,0 +1,11 @@
+node_modules/
+.env
+.DS_Store
+dist/
+build/
+coverage/
+.vscode/
+
+# Ignore user uploaded test images, but keep the directory
+public/uploads/*
+!public/uploads/.gitkeep
