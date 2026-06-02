@@ -3,6 +3,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import session from 'express-session';
 import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -615,7 +617,9 @@ app.post('/api/report', authenticateJWT, requireAuth, upload.single('photo'), as
     }
 
     // 1. DUPLICATE CHECK (Digital Fingerprint)
+    let finalPhotoUrl = null;
     let photoHash = null;
+
     if (req.file) {
       const fileBuffer = fs.readFileSync(req.file.path);
       photoHash = crypto.createHash('md5').update(fileBuffer).digest('hex');
@@ -632,6 +636,20 @@ app.post('/api/report', authenticateJWT, requireAuth, upload.single('photo'), as
           success: false,
           error: `Duplicate Photo! This image exists in Report #${duplicateReport.reportId}`
         });
+      }
+
+      // Upload to Cloudinary if configured
+      if (process.env.CLOUDINARY_URL) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path, { folder: 'greencredits_uploads' });
+          finalPhotoUrl = result.secure_url;
+          fs.unlinkSync(req.file.path);
+        } catch (err) {
+          console.error("Cloudinary upload error:", err);
+          finalPhotoUrl = `/uploads/${req.file.filename}`;
+        }
+      } else {
+        finalPhotoUrl = `/uploads/${req.file.filename}`;
       }
     }
 
@@ -670,7 +688,7 @@ app.post('/api/report', authenticateJWT, requireAuth, upload.single('photo'), as
       userId,
       reportId,
       description,
-      photoUrl: req.file ? `/uploads/${req.file.filename}` : null,
+      photoUrl: finalPhotoUrl,
       location: {
         type: 'Point',
         coordinates: [safeLng, safeLat] // Note: MongoDB uses [lng, lat]
@@ -1451,14 +1469,12 @@ app.post('/api/worker/reports/:id/complete', upload.single('photo'), async (req,
       return res.json({ success: false, message: 'Not assigned to this task' });
     }
 
-    report.status = 'resolved';
-    report.workerNotes = notes;
-    report.resolvedAt = new Date();
-    report.resolvedBy = req.session.workerId;
+    let finalCompletionPhotoUrl = null;
+    let photoHash = null;
 
     if (req.file) {
       const fileBuffer = fs.readFileSync(req.file.path);
-      const photoHash = crypto.createHash('md5').update(fileBuffer).digest('hex');
+      photoHash = crypto.createHash('md5').update(fileBuffer).digest('hex');
 
       const duplicateReport = await Report.findOne({
         $or: [
@@ -1475,7 +1491,27 @@ app.post('/api/worker/reports/:id/complete', upload.single('photo'), async (req,
         });
       }
 
-      report.completionPhotoUrl = `/uploads/${req.file.filename}`;
+      // Upload to Cloudinary if configured
+      if (process.env.CLOUDINARY_URL) {
+        try {
+          const result = await cloudinary.uploader.upload(req.file.path, { folder: 'greencredits_uploads' });
+          finalCompletionPhotoUrl = result.secure_url;
+          fs.unlinkSync(req.file.path);
+        } catch (err) {
+          console.error("Cloudinary upload error:", err);
+          finalCompletionPhotoUrl = `/uploads/${req.file.filename}`;
+        }
+      } else {
+        finalCompletionPhotoUrl = `/uploads/${req.file.filename}`;
+      }
+    }
+
+    report.status = 'resolved';
+    report.workerNotes = notes;
+    report.resolvedAt = new Date();
+    report.resolvedBy = req.session.workerId;
+    if (finalCompletionPhotoUrl) {
+      report.completionPhotoUrl = finalCompletionPhotoUrl;
       report.completionPhotoHash = photoHash; // Save hash for future checks
     }
 
