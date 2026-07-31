@@ -1,7 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": "public",
+  "builds": [
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -10,14 +14,6 @@
     {
       "source": "/uploads/:path*",
       "destination": "https://green-credits-hmj9.onrender.com/uploads/:path*"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Credentials", "value": "true" }
-      ]
     }
   ]
 }
