@@ -14,6 +14,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto'; // For Duplicate Detection
 import bcrypt from 'bcryptjs'; // For Password Hashing
 import MongoStore from 'connect-mongo';
+import cors from 'cors';
 
 // Import models
 import User from './models/User.js';
@@ -32,10 +33,22 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Allowed origins: Render backend itself + any Vercel deployment of this project
+const ALLOWED_ORIGINS = [
+  'https://green-credits-hmj9.onrender.com',
+  'https://greencredits.vercel.app',
+  /\.vercel\.app$/,  // any *.vercel.app preview deployment
+  'http://localhost:3000'
+];
+
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: "*" }
+  cors: {
+    origin: ALLOWED_ORIGINS,
+    credentials: true,
+    methods: ['GET', 'POST']
+  }
 });
 
 // ==========================================
@@ -57,6 +70,13 @@ app.post('/api/admin/reject-report', async (req, res) => {
     console.error('Reject Error:', error);
     res.status(500).json({ success: false, error: 'Failed to reject report' });
   }
+});
+
+// ==========================================
+// HEALTH / PING — Lightweight wake-up endpoint
+// ==========================================
+app.get('/api/ping', (req, res) => {
+  res.json({ ok: true, ts: Date.now() });
 });
 
 const PORT = process.env.PORT || 3000;
@@ -120,6 +140,24 @@ const upload = multer({
     cb(new Error('Only image and PDF files are allowed!'));
   }
 });
+
+// ==========================================
+// CORS — Must come before all other middleware
+// ==========================================
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, same-origin)
+    if (!origin) return callback(null, true);
+    const allowed = ALLOWED_ORIGINS.some(o =>
+      typeof o === 'string' ? o === origin : o.test(origin)
+    );
+    if (allowed) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware
 app.use(express.json());

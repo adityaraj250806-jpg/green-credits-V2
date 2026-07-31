@@ -2132,10 +2132,11 @@ function showRedemptionSuccess(rewardName, cost, newBalance) {
 // ⚡ REAL-TIME UPDATES (Socket.io)
 // ============================================
 
-const socket = io();
-
-// Join specific room if needed (optional implementation)
-// socket.emit('joinUserRoom', currentUser._id); 
+// Connect directly to Render backend (required when frontend is on Vercel)
+const BACKEND_URL = 'https://green-credits-hmj9.onrender.com';
+const socket = typeof io !== 'undefined'
+  ? io(BACKEND_URL, { withCredentials: true, transports: ['websocket', 'polling'] })
+  : { on: () => {}, emit: () => {} }; // no-op fallback if socket.io script failed to load
 
 socket.on('connect', () => {
   console.log('⚡ Connected to real-time server');

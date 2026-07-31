@@ -445,7 +445,7 @@
     </div>
 
     <!-- Socket.io -->
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://green-credits-hmj9.onrender.com/socket.io/socket.io.js"></script>
 
     <script>
         let currentWorker = null;
@@ -453,7 +453,10 @@
         let currentTab = 'pending';
 
         // Initialize Socket.io
-        const socket = io();
+        const socket = io('https://green-credits-hmj9.onrender.com', {
+            withCredentials: true,
+            transports: ['websocket', 'polling']
+        });
         socket.on('newReport', () => { loadTasks(); });
         socket.on('reportUpdated', () => { loadTasks(); });
 

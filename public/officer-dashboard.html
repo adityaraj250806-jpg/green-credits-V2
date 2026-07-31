@@ -545,7 +545,7 @@
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://green-credits-hmj9.onrender.com/socket.io/socket.io.js"></script>
     <script>
         // State
         let currentOfficer = null;
@@ -557,7 +557,10 @@
             const date = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('currentDate').textContent = date;
 
-            const socket = io();
+            const socket = io('https://green-credits-hmj9.onrender.com', {
+                withCredentials: true,
+                transports: ['websocket', 'polling']
+            });
             socket.on('newReport', () => loadDashboardData());
             socket.on('reportUpdated', () => loadDashboardData());
 
@@ -949,9 +952,12 @@
             } catch (e) { alert('Connection error'); }
         }
     </script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://green-credits-hmj9.onrender.com/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io('https://green-credits-hmj9.onrender.com', {
+            withCredentials: true,
+            transports: ['websocket', 'polling']
+        });
         socket.on('newReport', (report) => {
             // Refresh dashboard if new report comes in
             showNotification('New Report Received! 📋', 'info');

@@ -620,7 +620,7 @@
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://green-credits-hmj9.onrender.com/socket.io/socket.io.js"></script>
     <script>
         // State
         let allWorkers = [];
@@ -632,7 +632,10 @@
             loadDashboard();
             
             // Initialize Socket.io
-            socket = io();
+            socket = io('https://green-credits-hmj9.onrender.com', {
+                withCredentials: true,
+                transports: ['websocket', 'polling']
+            });
             socket.on('newReport', () => loadDashboard());
             socket.on('reportUpdated', () => loadDashboard());
         });
