@@ -2133,9 +2133,8 @@ function showRedemptionSuccess(rewardName, cost, newBalance) {
 // ============================================
 
 // Connect directly to Render backend (required when frontend is on Vercel)
-const BACKEND_URL = 'https://green-credits-hmj9.onrender.com';
 const socket = typeof io !== 'undefined'
-  ? io(BACKEND_URL, { withCredentials: true, transports: ['websocket', 'polling'] })
+  ? io('https://green-credits-hmj9.onrender.com', { withCredentials: true, transports: ['websocket', 'polling'] })
   : { on: () => {}, emit: () => {} }; // no-op fallback if socket.io script failed to load
 
 socket.on('connect', () => {

@@ -744,9 +744,9 @@
             }
         }
 
-        // Ping the lightweight /api/ping endpoint
+        // Ping the lightweight /api/ping endpoint via Vercel proxy
         function ping() {
-            fetch(BACKEND + '/api/ping', { mode: 'cors' })
+            fetch('/api/ping')
                 .then(r => r.ok ? hideBanner() : retry())
                 .catch(() => retry());
         }
