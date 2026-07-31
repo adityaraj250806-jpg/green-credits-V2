@@ -1,23 +1,16 @@
 {
   "version": 2,
-  "builds": [
+  "buildCommand": "echo done",
+  "outputDirectory": "public",
+  "framework": null,
+  "rewrites": [
     {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "https://green-credits-hmj9.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://green-credits-hmj9.onrender.com/api/:path*"
     },
     {
-      "src": "/uploads/(.*)",
-      "dest": "https://green-credits-hmj9.onrender.com/uploads/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/uploads/:path*",
+      "destination": "https://green-credits-hmj9.onrender.com/uploads/:path*"
     }
   ]
 }
