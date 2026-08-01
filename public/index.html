@@ -657,29 +657,25 @@
 
     <!-- CAMERA MODAL -->
     <div id="cameraModal" class="modal">
-        <div class="modal-content" style="max-width: 500px; width: 95%; text-align: center;">
-            <span class="close-btn" onclick="closeModal('cameraModal')">&times;</span>
-            <h2>📷 Take Photo</h2>
+        <div style="background: black; width: 100vw; height: 100vh; max-height: 100vh; position: relative; display: flex; flex-direction: column;">
+            
+            <!-- Header -->
+            <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; position: absolute; top: 0; left: 0; right: 0; z-index: 10; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);">
+                <button onclick="closeModal('cameraModal')" style="background: rgba(0,0,0,0.5); border: none; color: white; font-size: 2rem; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">&times;</button>
+                <button id="switchCameraBtn" style="background: rgba(0,0,0,0.5); border: none; color: white; padding: 10px 20px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; display: none;">🔄 Flip</button>
+            </div>
 
-            <div
-                style="position: relative; width: 100%; background: black; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3;">
-                <video id="cameraFeed" autoplay playsinline
-                    style="width: 100%; height: 100%; object-fit: cover;"></video>
+            <!-- Video Feed -->
+            <div style="flex: 1; position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #000;">
+                <video id="cameraFeed" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;"></video>
                 <canvas id="cameraCanvas" style="display: none;"></canvas>
             </div>
 
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
-                <button id="captureBtn" class="btn-primary btn-large" style="min-width: 150px;">
-                    Capture
-                </button>
-                <button onclick="closeModal('cameraModal')" class="btn-outline">
-                    Cancel
-                </button>
-            </div>
-
-            <div style="margin-top: 10px; display: flex; justify-content: center;">
-                <button id="switchCameraBtn" class="btn-text" style="color: #666; font-size: 0.9rem; display: none;">
-                    🔄 Switch Camera
+            <!-- Footer / Controls -->
+            <div style="padding: 40px 20px 60px 20px; display: flex; justify-content: center; align-items: center; position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);">
+                <!-- Shutter Button -->
+                <button id="captureBtn" style="width: 86px; height: 86px; border-radius: 50%; background: transparent; border: 6px solid white; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 4px;">
+                    <div style="width: 100%; height: 100%; background: white; border-radius: 50%; transition: transform 0.1s;" onmousedown="this.style.transform='scale(0.9)'" onmouseup="this.style.transform='scale(1)'" ontouchstart="this.style.transform='scale(0.9)'" ontouchend="this.style.transform='scale(1)'"></div>
                 </button>
             </div>
         </div>
