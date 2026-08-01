@@ -45,7 +45,14 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ALLOWED_ORIGINS,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const allowed = ALLOWED_ORIGINS.some(o =>
+        typeof o === 'string' ? o === origin : o.test(origin)
+      );
+      if (allowed) return callback(null, true);
+      callback(new Error(`Socket CORS blocked: ${origin}`));
+    },
     credentials: true,
     methods: ['GET', 'POST']
   }

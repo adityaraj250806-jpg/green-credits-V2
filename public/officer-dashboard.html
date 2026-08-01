@@ -954,18 +954,7 @@
     </script>
     <script src="https://green-credits-hmj9.onrender.com/socket.io/socket.io.js"></script>
     <script>
-        const socket = io('https://green-credits-hmj9.onrender.com', {
-            withCredentials: true,
-            transports: ['websocket', 'polling']
-        });
-        socket.on('newReport', (report) => {
-            // Refresh dashboard if new report comes in
-            showNotification('New Report Received! 📋', 'info');
-            loadDashboardData();
-        });
-        socket.on('reportUpdated', () => {
-            loadDashboardData();
-        });
+        // Socket connection handled in DOMContentLoaded
 
         function showNotification(message, type = 'info') {
             // Simple alert for now, or could implement toast like worker dashboard
