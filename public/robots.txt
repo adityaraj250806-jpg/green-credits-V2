@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /uploads/
 
-Sitemap: https://green-credits-hmj9.onrender.com/sitemap.xml
+Sitemap: https://green-credits-v2-cj1g.vercel.app/sitemap.xml

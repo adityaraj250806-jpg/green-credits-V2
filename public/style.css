@@ -2087,4 +2087,144 @@ input[type="file"] {
   opacity: 1;
 }
 
+/* === MOBILE OPTIMIZATION === */
+@media (max-width: 768px) {
+  /* Global */
+  section {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Header & Navigation */
+  .site-header {
+    padding: 10px 0;
+  }
+  
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+  
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .main-nav {
+    display: none; /* Handled by JS toggle if implemented, or fallback */
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    padding: var(--spacing-md);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .main-nav.active {
+    display: flex;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .auth-buttons {
+    display: none; /* Hide top buttons on mobile to save space, usually inside hamburger */
+  }
+  
+  .main-nav.active + .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 250px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: var(--spacing-md);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+
+  /* Hero Section */
+  .hero-section {
+    min-height: auto;
+    padding: 80px 0 60px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    padding: 0 10px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons button {
+    width: 100%;
+  }
+
+  /* Grids & Cards */
+  .highlights-grid,
+  .journey-steps,
+  .footer-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .journey-connector {
+    transform: rotate(90deg);
+    margin: 15px auto;
+  }
+
+  .app-buttons {
+    flex-direction: column;
+  }
+
+  .app-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Dashboard Tabs */
+  .dashboard-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .dashboard-nav .tab-btn {
+    width: 100%;
+  }
+
+  /* Modals */
+  .modal-content {
+    padding: var(--spacing-lg);
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 20px;
+    width: auto;
+  }
+
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+
+  /* File Upload Input */
+  .photo-upload-group {
+    flex-direction: column;
+  }
+}
+
 /* End of Styles */
