@@ -2234,14 +2234,18 @@ document.addEventListener('DOMContentLoaded', initCameraSystem);
 
 async function openCameraModal() {
   const modal = document.getElementById('cameraModal');
-  modal.classList.add('active');
+  // Use the global openModal function to ensure display: flex is set properly
+  openModal('cameraModal');
   await startCamera();
 
   // Handle close button specifically to stop stream
-  const closeBtn = modal.querySelector('.close-btn');
-  closeBtn.onclick = () => {
-    closeModal('cameraModal');
-    stopCamera();
+  // Added fallback to query by tag name or onclick since the class changed
+  const closeBtn = modal.querySelector('button[onclick*="closeModal"]') || modal.querySelector('.close-btn');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      closeModal('cameraModal');
+      stopCamera();
+    }
   }
 }
 
