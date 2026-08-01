@@ -7,7 +7,7 @@
   <p><strong>Clean Tomorrow, Powered by You 🇮🇳</strong></p>
   <p>A gamified civic-action platform empowering citizens to report waste, earn credits, and create cleaner communities through technology.</p>
   
-  <h3><a href="https://green-credits-hmj9.onrender.com/">🌍 View Live Project</a></h3>
+  <h3><a href="https://green-credits-v2-cj1g.vercel.app/">🌍 View Live Project</a></h3>
 </div>
 
 <hr>
