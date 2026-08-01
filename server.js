@@ -46,11 +46,16 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
+      console.log('Socket Connection Attempt from Origin:', origin);
+      if (!origin || origin === 'null') return callback(null, true);
       const allowed = ALLOWED_ORIGINS.some(o =>
         typeof o === 'string' ? o === origin : o.test(origin)
       );
-      if (allowed) return callback(null, true);
+      if (allowed) {
+        console.log('Socket Allowed Origin:', origin);
+        return callback(null, true);
+      }
+      console.log('Socket Blocked Origin:', origin);
       callback(new Error(`Socket CORS blocked: ${origin}`));
     },
     credentials: true,
@@ -445,7 +450,7 @@ app.get('/api/check-session', async (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', version: '2.0', message: 'System Operational' });
+  res.json({ status: 'ok', version: '2.0', message: 'System Operational', timestamp: Date.now() });
 });
 
 // ============================================
